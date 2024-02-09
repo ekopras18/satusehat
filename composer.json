@@ -23,7 +23,5 @@
             "Ekopras18\\Satusehat\\": "src/"
         }
     },
-    "require": {
-        "": ""
-    }
+    "require": {}
 }
