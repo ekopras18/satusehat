@@ -10,7 +10,6 @@
     "homepage": "https://github.com/ekopras18/satusehat",
     "license": "MIT",
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "authors": [
         {
             "name": "Eko Prasetio",
