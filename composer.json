@@ -1,0 +1,29 @@
+{
+    "name": "ekopras18/satusehat",
+    "description": "library to integrate with satusehat",
+    "keywords": [
+        "ekopras18",
+        "satusehat",
+        "integrasi-satusehat"
+    ],
+    "type": "library",
+    "homepage": "https://github.com/ekopras18/satusehat",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Eko Prasetio",
+            "email": "ekoxit1@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ekopras18\\Satusehat\\": "src/"
+        }
+    },
+    "require": {
+        "": ""
+    }
+}
