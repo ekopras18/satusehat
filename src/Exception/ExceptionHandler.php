@@ -40,17 +40,21 @@ class ExceptionHandler
         ], 404);
     }
 
-    public function OperationOutcome($response)
+    public static function OperationOutcome($response)
     {
         $issue = $response['issue'][0];
         $severity = $issue['severity'];
         $code = $issue['code'];
         $details = $issue['details']['text'];
 
-        return $this->response401("Error - Severity: $severity, Code: $code, Details: $details");
+        return response()->json([
+            'status' => false,
+            'message' => "Error - Severity: $severity, Code: $code, Details: $details",
+            'code' => 401
+        ], 401);
     }
 
-    public function responseAuth($message,$response)
+    public static function responseAuth($message,$response)
     {
         return response()->json([
             'status' => true,
