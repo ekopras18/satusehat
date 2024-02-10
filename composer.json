@@ -1,6 +1,6 @@
 {
     "name": "ekopras18/satusehat",
-    "description": "library to integrate with satusehat",
+    "description": "Make it easy, why should it be hard?, Satusehat Integration",
     "keywords": [
         "ekopras18",
         "satusehat",
@@ -10,6 +10,7 @@
     "homepage": "https://github.com/ekopras18/satusehat",
     "license": "MIT",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Eko Prasetio",
@@ -20,6 +21,13 @@
     "autoload": {
         "psr-4": {
             "Ekopras18\\Satusehat\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ekopras18\\Satusehat\\SatusehatServiceProvider"
+            ]
         }
     },
     "require": {}
