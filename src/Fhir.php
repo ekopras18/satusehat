@@ -36,6 +36,43 @@ class  Fhir
         return 'fhir';
     }
 
+    public function token()
+    {
+        $getToken = Token::where('env', config('satusehat.environment'))->first();
+
+        if ($getToken === null) {
+            $generate_token = $this->generate_token();
+
+            Token::create([
+                'env' => config('satusehat.environment'),
+                'token' => $generate_token['access_token'],
+                'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
+            ]);
+
+            return ExceptionHandler::response201('New Token Generated');
+
+        } else {
+
+            if (Carbon::now()->gt($getToken->last_used_at)) {
+                $refresh_token = $this->generate_token();
+
+                Token::where('env', config('satusehat.environment'))->update([
+                    'env' => config('satusehat.environment'),
+                    'token' => $refresh_token['access_token'],
+                    'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
+                ]);
+
+                return ExceptionHandler::response201('Success Refresh Token');
+
+            } else {
+
+                return ExceptionHandler::response201('Success');
+
+            }
+        }
+
+    }
+
     public function generate_token()
     {
         $curl = curl_init();
@@ -76,43 +113,5 @@ class  Fhir
 
         }
     }
-
-    public function token()
-    {
-        $getToken = Token::where('env', config('satusehat.environment'))->first();
-
-        if ($getToken === null) {
-            $generate_token = $this->generate_token();
-
-            Token::create([
-                'env' => config('satusehat.environment'),
-                'token' => $generate_token['access_token'],
-                'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
-            ]);
-
-            return ExceptionHandler::response201('New Token Generated');
-
-        } else {
-
-            if (Carbon::now()->gt($getToken->last_used_at)) {
-                $refresh_token = $this->generate_token();
-
-                Token::where('env', config('satusehat.environment'))->update([
-                    'env' => config('satusehat.environment'),
-                    'token' => $refresh_token['access_token'],
-                    'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
-                ]);
-
-                return ExceptionHandler::response201('Success Refresh Token');
-
-            } else {
-
-                return ExceptionHandler::response201('Success');
-
-            }
-        }
-
-    }
-
 
 }
