@@ -23,6 +23,11 @@
             "Ekopras18\\Satusehat\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Ekopras18\\Satusehat\\Tests\\": "tests"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -30,5 +35,7 @@
             ]
         }
     },
-    "require": {}
+    "require": {
+        "php": ">=7.4"
+    }
 }

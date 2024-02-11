@@ -3,7 +3,7 @@
 namespace Ekopras18\Satusehat\Exception;
 class ExceptionHandler
 {
-    public function response200($message, $data)
+    public static function response200($message, $data)
     {
         return response()->json([
             'status' => true,
@@ -13,7 +13,7 @@ class ExceptionHandler
         ], 200);
     }
 
-    public function response201($message)
+    public static function response201($message)
     {
         return response()->json([
             'status' => true,
@@ -22,7 +22,7 @@ class ExceptionHandler
         ], 201);
     }
 
-    public function response401($message)
+    public static function response401($message)
     {
         return response()->json([
             'status' => false,
@@ -31,7 +31,7 @@ class ExceptionHandler
         ], 401);
     }
 
-    public function response404($message)
+    public static function response404($message)
     {
         return response()->json([
             'status' => false,
@@ -52,20 +52,5 @@ class ExceptionHandler
             'message' => "Error - Severity: $severity, Code: $code, Details: $details",
             'code' => 401
         ], 401);
-    }
-
-    public static function responseAuth($message,$response)
-    {
-        return response()->json([
-            'status' => true,
-            'message' => $message,
-            'code' => 200,
-            'data' => [
-                'api_product' => $response['api_product_list'],
-                'access_token' => $response['access_token'],
-                'token_type' => $response['token_type'],
-                'expires_in' => $response['expires_in']
-            ]
-        ], 200);
     }
 }
