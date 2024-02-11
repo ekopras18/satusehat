@@ -4,7 +4,7 @@ return [
     /*
      * Environment can be 'production', 'staging', or 'development'
      */
-    'environment' => env('SATUSEHAT_ENVIRONMENT', 'development'),
+    'environment' => env('SATUSEHAT_ENV', 'development'),
 
     /*
      * This is the client_id, client_secret, and organization_id that will be used to generate the token
@@ -29,4 +29,8 @@ return [
     'auth_url_dev' => env('SATUSEHAT_AUTH_URL_DEV', 'https://api-satusehat-dev.dto.kemkes.go.id/oauth2/v1'),
     'base_url_dev' => env('SATUSEHAT_BASE_URL_DEV', 'https://api-satusehat-dev.dto.kemkes.go.id/fhir-r4/v1'),
     'consent_url_dev' => env('SATUSEHAT_CONSENT_URL_DEV', 'https://api-satusehat-dev.dto.kemkes.go.id/consent/v1'),
+
+
+    'token_table' => 'ss_token',
+
 ];

@@ -3,11 +3,11 @@
 namespace Ekopras18\Satusehat;
 
 use Ekopras18\Satusehat\Exception\ExceptionHandler;
+use Ekopras18\Satusehat\Models\Token;
+use Carbon\Carbon;
 
-class  Satusehat
+class  Fhir
 {
-    public static $access_token = null;
-
     public function __construct()
     {
         $this->env = config('satusehat.environment');
@@ -33,10 +33,10 @@ class  Satusehat
 
     public function fhir()
     {
-        return $this->$access_token;
+        return 'fhir';
     }
 
-    public function generateToken()
+    public function generate_token()
     {
         $curl = curl_init();
 
@@ -71,10 +71,36 @@ class  Satusehat
             return ExceptionHandler::OperationOutcome($response);
 
         } else {
-            self::$access_token = $response['access_token'];
+
+            $this->token($response['access_token']);
 
             return ExceptionHandler::responseAuth('Success Create Token', $response);
         }
+    }
+
+    public function token($access_token = null)
+    {
+        $getToken = Token::where('env', config('satusehat.environment'))->first();
+
+        if ($getToken === null) {
+            $setToken = Token::create([
+                'env' => config('satusehat.environment'),
+                'token' => $access_token,
+                'last_used_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+        }
+
+        $last_used_at = Carbon::parse($getToken->last_used_at);
+
+        $expired = $last_used_at->addSeconds(3500)->format('Y-m-d H:i:s');
+
+        if (Carbon::now()->gt($expired)) {
+            return $this->generate_token();
+        } else {
+            return ['no expired', $getToken->token];
+        }
+
+
     }
 
 
