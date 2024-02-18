@@ -44,3 +44,34 @@ Fast Healthcare Interoperability Resources FHIR adalah sebuah standar global (in
    - [ ] RelatedPerson
    - [ ] ServiceRequest
    - [ ] Specimen
+
+## Installation
+
+1. Install package via composer
+
+   ```bash
+   composer require ekopras18/satusehat
+   ```
+2. Publish the configuration file & migration file
+
+   ```bash
+   php artisan vendor:publish --provider="Ekopras18\Satusehat\SatusehatServiceProvider" --tag=satusehat
+   ```
+3. Set the configuration in `.env` file. example `.env.example`
+
+   ```env
+   SATUSEHAT_ENV=development|staging|production
+   SATUSEHAT_CLIENT_ID=CWdRq...............
+   SATUSEHAT_CLIENT_SECRET=vRTWTnAN...............
+   SATUSEHAT_ORGANIZATION_ID=5990777e-...............
+   SATUSEHAT_ORGANIZATION_NAME="RSUD X"
+   ```
+4. Migrate the table
+
+   ```bash
+   php artisan migrate
+   ```
+5. Done
+
+## Usage
+   

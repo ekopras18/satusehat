@@ -3,24 +3,44 @@
 namespace Ekopras18\Satusehat;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class SatusehatServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         // Publish Config
-        $timestamp = date('Y_m_d_His', time());
-        $this->publishes([
-            __DIR__.'/config/satusehat.php' => config_path('satusehat.php'),
-            __DIR__.'/database/migrations/create_ss_token_table.php.stub' => database_path("/migrations/{$timestamp}_create_ss_token_table.php"),
-            __DIR__.'/database/migrations/create_ss_organization_table.php.stub' => database_path("/migrations/{$timestamp}_create_ss_organization_table.php"),
-        ], 'satusehat');
-
-        $this->mergeConfigFrom(__DIR__.'/config/satusehat.php', 'satusehat');
+        $this->publishConfig();
+        $this->publishMigrations();
     }
 
     public function register()
     {
         //
+    }
+
+    private function publishConfig()
+    {
+        $configPath = __DIR__ . '/config/satusehat.php';
+        $this->publishes([$configPath => config_path('satusehat.php')], 'satusehat');
+        $this->mergeConfigFrom($configPath, 'satusehat');
+    }
+
+    private function publishMigrations()
+    {
+        $timestamp = date('Y_m_d_His');
+        $migrationStubPath = __DIR__ . '/database/migrations/';
+
+        $this->publishMigration('CreateSsTokenTable', $timestamp, $migrationStubPath . 'create_ss_token_table.php.stub');
+        $this->publishMigration('CreateSsOrganizationTable', $timestamp, $migrationStubPath . 'create_ss_organization_table.php.stub');
+    }
+
+    private function publishMigration($className, $timestamp, $stubPath)
+    {
+        if (!class_exists($className)) {
+            $this->publishes([
+                $stubPath => database_path("/migrations/{$timestamp}_" . Str::snake($className) . ".php"),
+            ], 'satusehat');
+        }
     }
 }

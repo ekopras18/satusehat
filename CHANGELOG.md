@@ -2,6 +2,7 @@
 
 ## [v0.1.2-dev](#) - 2024-02-18
 
+- add onboarding organization
 - add migration organization
 - add core fhir
 - optimize code

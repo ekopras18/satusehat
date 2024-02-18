@@ -13,6 +13,7 @@ return [
     'client_id' => env('SATUSEHAT_CLIENT_ID', 'your-client-id'),
     'client_secret' => env('SATUSEHAT_CLIENT_SECRET', 'your-client-secret'),
     'organization_id' => env('SATUSEHAT_ORGANIZATION_ID', 'your-organization-id'),
+    'organization_name' => env('SATUSEHAT_ORGANIZATION_NAME', 'your-organization-name'),
 
     /*
      * Set the auth_url, base_url, and consent_url for each environment

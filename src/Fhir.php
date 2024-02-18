@@ -29,13 +29,14 @@ class Fhir
         $this->clientId = config('satusehat.client_id');
         $this->clientSecret = config('satusehat.client_secret');
         $this->organizationId = config('satusehat.organization_id');
+        $this->organizationName = config('satusehat.organization_name');
+        $this->get_token = Token::where('env', config('satusehat.environment'))->first();
     }
 
     public function fhir($url, $method, $body, $contentType)
     {
         // check token
         $this->token();
-        $getToken = Token::where('env', config('satusehat.environment'))->first();
 
         $curl = curl_init();
 
@@ -51,7 +52,7 @@ class Fhir
             CURLOPT_POSTFIELDS => $body == null ? json_decode($body, true) : json_encode($body, true),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: ' . $contentType,
-                'Authorization: Bearer ' . $getToken['token']
+                'Authorization: Bearer ' . $this->get_token['token']
             ),
         ));
 
@@ -75,7 +76,7 @@ class Fhir
 
     public function token()
     {
-        $getToken = Token::where('env', config('satusehat.environment'))->first();
+        $getToken = $this->get_token;
 
         if ($getToken === null) {
             $generate_token = $this->generate_token();
