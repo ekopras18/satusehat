@@ -19,5 +19,9 @@ class Token extends Model
 
     protected $primaryKey = 'id';
 
-    protected $casts = ['env' => 'string', 'token' => 'string', 'last_used_at' => 'datetime'];
+    protected $casts = [
+        'env' => 'string',
+        'token' => 'string',
+        'last_used_at' => 'datetime'
+    ];
 }

@@ -13,6 +13,7 @@ class SatusehatServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/config/satusehat.php' => config_path('satusehat.php'),
             __DIR__.'/database/migrations/create_ss_token_table.php.stub' => database_path("/migrations/{$timestamp}_create_ss_token_table.php"),
+            __DIR__.'/database/migrations/create_ss_organization_table.php.stub' => database_path("/migrations/{$timestamp}_create_ss_organization_table.php"),
         ], 'satusehat');
 
         $this->mergeConfigFrom(__DIR__.'/config/satusehat.php', 'satusehat');

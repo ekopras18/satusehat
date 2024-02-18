@@ -47,9 +47,21 @@ class ExceptionHandler
         $code = $issue['code'];
         $details = $issue['details']['text'];
 
+        if (isset($issue['details']['diagnostics'])) {
+            $diagnostics = $issue['details']['diagnostics'];
+        } else {
+            $diagnostics = '-';
+        }
+
+        if (isset($issue['diagnostics'])) {
+            $diagnostics = $issue['diagnostics'];
+        } else {
+            $diagnostics = '-';
+        }
+
         return response()->json([
             'status' => false,
-            'message' => "Error - Severity: $severity, Code: $code, Details: $details",
+            'message' => "Error - Severity: $severity, Code: $code, Details: $details, Diagnostics: $diagnostics",
             'code' => 401
         ], 401);
     }

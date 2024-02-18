@@ -6,7 +6,7 @@ use Ekopras18\Satusehat\Exception\ExceptionHandler;
 use Ekopras18\Satusehat\Models\Token;
 use Carbon\Carbon;
 
-class  Fhir
+class Fhir
 {
     public function __construct()
     {
@@ -31,9 +31,46 @@ class  Fhir
         $this->organizationId = config('satusehat.organization_id');
     }
 
-    public function fhir()
+    public function fhir($url, $method, $body, $contentType)
     {
-        return 'fhir';
+        // check token
+        $this->token();
+        $getToken = Token::where('env', config('satusehat.environment'))->first();
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_POSTFIELDS => $body == null ? json_decode($body, true) : json_encode($body, true),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: ' . $contentType,
+                'Authorization: Bearer ' . $getToken['token']
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        $response = json_decode($response, true);
+
+        if ($response === null) {
+            return ExceptionHandler::response401('Response is null, please check your request body and header');
+        }
+
+        // Check error response
+        if (isset($response['resourceType']) && $response['resourceType'] === 'OperationOutcome') {
+            return ExceptionHandler::OperationOutcome($response);
+        } else {
+            return $response;
+        }
     }
 
     public function token()

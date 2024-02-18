@@ -31,6 +31,13 @@ return [
     'consent_url_dev' => env('SATUSEHAT_CONSENT_URL_DEV', 'https://api-satusehat-dev.dto.kemkes.go.id/consent/v1'),
 
 
+    /*
+     * Set the table name for token, organization, Location, and Encounter
+     */
+
     'token_table' => 'ss_token',
+    'organization_table' => 'ss_organization',
+    'location_table' => 'ss_location',
+    'encounter_table' => 'ss_encounter',
 
 ];
