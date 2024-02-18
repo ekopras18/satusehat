@@ -4,40 +4,16 @@ namespace Ekopras18\Satusehat;
 
 use Ekopras18\Satusehat\Exception\ExceptionHandler;
 use Ekopras18\Satusehat\Models\Token;
+use Ekopras18\Satusehat\Config\Environment;
 use Carbon\Carbon;
 
 class Fhir
 {
-    public function __construct()
-    {
-        $this->env = config('satusehat.environment');
-
-        if ($this->env == 'production') {
-            $this->authUrl = config('satusehat.auth_url_prod');
-            $this->baseUrl = config('satusehat.base_url_prod');
-            $this->consentUrl = config('satusehat.consent_url_prod');
-        } else if ($this->env == 'staging') {
-            $this->authUrl = config('satusehat.auth_url_stg');
-            $this->baseUrl = config('satusehat.base_url_stg');
-            $this->consentUrl = config('satusehat.consent_url_stg');
-        } else {
-            $this->authUrl = config('satusehat.auth_url_dev');
-            $this->baseUrl = config('satusehat.base_url_dev');
-            $this->consentUrl = config('satusehat.consent_url_dev');
-        }
-
-        $this->clientId = config('satusehat.client_id');
-        $this->clientSecret = config('satusehat.client_secret');
-        $this->organizationId = config('satusehat.organization_id');
-        $this->organizationName = config('satusehat.organization_name');
-        $this->get_token = Token::where('env', config('satusehat.environment'))->first();
-    }
-
     public function fhir($url, $method, $body, $contentType)
     {
         // check token
         $this->token();
-
+        $getToken = Token::where('env', Environment::env())->first();
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -52,7 +28,7 @@ class Fhir
             CURLOPT_POSTFIELDS => $body == null ? json_decode($body, true) : json_encode($body, true),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: ' . $contentType,
-                'Authorization: Bearer ' . $this->get_token['token']
+                'Authorization: Bearer ' . $getToken['token']
             ),
         ));
 
@@ -70,19 +46,19 @@ class Fhir
         if (isset($response['resourceType']) && $response['resourceType'] === 'OperationOutcome') {
             return ExceptionHandler::OperationOutcome($response);
         } else {
-            return $response;
+            return ExceptionHandler::response200('Success',$response);
         }
     }
 
     public function token()
     {
-        $getToken = $this->get_token;
+        $getToken = Token::where('env', Environment::env())->first();
 
         if ($getToken === null) {
             $generate_token = $this->generate_token();
 
             Token::create([
-                'env' => config('satusehat.environment'),
+                'env' => Environment::env(),
                 'token' => $generate_token['access_token'],
                 'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
             ]);
@@ -94,8 +70,8 @@ class Fhir
             if (Carbon::now()->gt($getToken->last_used_at)) {
                 $refresh_token = $this->generate_token();
 
-                Token::where('env', config('satusehat.environment'))->update([
-                    'env' => config('satusehat.environment'),
+                Token::where('env', Environment::env())->update([
+                    'env' => Environment::env(),
                     'token' => $refresh_token['access_token'],
                     'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
                 ]);
@@ -116,7 +92,7 @@ class Fhir
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->authUrl . '/accesstoken?grant_type=client_credentials',
+            CURLOPT_URL => Environment::url()['authUrl'] . '/accesstoken?grant_type=client_credentials',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -124,7 +100,7 @@ class Fhir
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'client_id=' . $this->clientId . '&client_secret=' . $this->clientSecret,
+            CURLOPT_POSTFIELDS => 'client_id=' . Environment::auth()['clientId'] . '&client_secret=' . Environment::auth()['clientSecret'],
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded'
             ),

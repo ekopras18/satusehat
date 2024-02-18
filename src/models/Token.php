@@ -11,7 +11,7 @@ class Token extends Model
     public function __construct(array $attributes = [])
     {
         if (!isset($this->table)) {
-            $this->setTable(config('satusehat.token_table'));
+            $this->setTable(config('satusehat.table.token'));
         }
 
         parent::__construct($attributes);

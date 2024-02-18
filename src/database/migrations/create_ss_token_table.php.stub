@@ -13,7 +13,7 @@ class CreateSsTokenTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('satusehat.token_table'), function (Blueprint $table) {
+        Schema::create(config('satusehat.table.token'), function (Blueprint $table) {
             $table->id();
             $table->string('env');
             $table->string('token', 64)->unique();
@@ -29,6 +29,6 @@ class CreateSsTokenTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('satusehat.token_table'));
+        Schema::dropIfExists(config('satusehat.table.token'));
     }
 }

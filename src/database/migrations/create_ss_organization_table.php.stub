@@ -13,7 +13,7 @@ class CreateSsOrganizationTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('satusehat.organization_table'), function (Blueprint $table) {
+        Schema::create(config('satusehat.table.organization'), function (Blueprint $table) {
             $table->id();
             $table->string('env');
             $table->string('token', 64)->unique();
@@ -29,6 +29,6 @@ class CreateSsOrganizationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('satusehat.organization_table'));
+        Schema::dropIfExists(config('satusehat.table.organization'));
     }
 }
