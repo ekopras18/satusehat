@@ -10,72 +10,33 @@ namespace Ekopras18\Satusehat\Exception;
 class ExceptionHandler
 {
     /**
-     * Generate a 200 OK response.
+     * Handles a response.
      *
-     * @param string $message The response message.
-     * @param mixed $data The data to be included in the response.
-     * @return \Illuminate\Http\JsonResponse
+     * @param string $message The message to send to the client.
+     * @param int $code The HTTP status code to send to the client.
+     * @param mixed $data The data to send to the client.
+     * @return \Illuminate\Http\JsonResponse The response to send to the client.
      */
-    public static function response200($message, $data)
+    public static function response($message, $code, $data = null)
     {
-        return response()->json([
-            'status' => true,
+        $response = [
+            'status' => $code >= 200 && $code < 300,
             'message' => $message,
-            'code' => 200,
-            'data' => $data
-        ], 200);
+            'code' => $code
+        ];
+
+        if ($data !== null) {
+            $response['data'] = $data;
+        }
+
+        return response()->json($response, $code);
     }
 
     /**
-     * Generate a 201 Created response.
+     * Handles a 401 response.
      *
-     * @param string $message The response message.
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public static function response201($message)
-    {
-        return response()->json([
-            'status' => true,
-            'message' => $message,
-            'code' => 201
-        ], 201);
-    }
-
-    /**
-     * Generate a 401 Unauthorized response.
-     *
-     * @param string $message The response message.
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public static function response401($message)
-    {
-        return response()->json([
-            'status' => false,
-            'message' => $message,
-            'code' => 401
-        ], 401);
-    }
-
-    /**
-     * Generate a 404 Not Found response.
-     *
-     * @param string $message The response message.
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public static function response404($message)
-    {
-        return response()->json([
-            'status' => false,
-            'message' => $message,
-            'code' => 404
-        ], 404);
-    }
-
-    /**
-     * Generate a 401 Unauthorized response with detailed error information.
-     *
-     * @param array $response The response data containing error details.
-     * @return \Illuminate\Http\JsonResponse
+     * @param array $response The response from the server.
+     * @return \Illuminate\Http\JsonResponse The response to send to the client.
      */
     public static function operationOutcome($response)
     {
@@ -83,23 +44,10 @@ class ExceptionHandler
         $severity = $issue['severity'];
         $code = $issue['code'];
         $details = $issue['details']['text'];
+        $diagnostics = $issue['details']['diagnostics'] ?? $issue['diagnostics'] ?? '-';
 
-        if (isset($issue['details']['diagnostics'])) {
-            $diagnostics = $issue['details']['diagnostics'];
-        } else {
-            $diagnostics = '-';
-        }
+        $message = "Error - Severity: $severity, Code: $code, Details: $details, Diagnostics: $diagnostics";
 
-        if (isset($issue['diagnostics'])) {
-            $diagnostics = $issue['diagnostics'];
-        } else {
-            $diagnostics = '-';
-        }
-
-        return response()->json([
-            'status' => false,
-            'message' => "Error - Severity: $severity, Code: $code, Details: $details, Diagnostics: $diagnostics",
-            'code' => 401
-        ], 401);
+        return self::response($message, 401);
     }
 }

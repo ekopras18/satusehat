@@ -53,14 +53,14 @@ class Fhir
         $response = json_decode($response, true);
 
         if ($response === null) {
-            return ExceptionHandler::response401('Response is null, please check your request body and header');
+            return ExceptionHandler::response('Response is null, please check your request body and header',401);
         }
 
         // Check error response
         if (isset($response['resourceType']) && $response['resourceType'] === 'OperationOutcome') {
             return ExceptionHandler::operationOutcome($response);
         } else {
-            return ExceptionHandler::response200('Success',$response);
+            return ExceptionHandler::response('Success',200,$response);
         }
     }
 
@@ -82,7 +82,7 @@ class Fhir
                 'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
             ]);
 
-            return ExceptionHandler::response201('New Token Generated');
+            return ExceptionHandler::response('New Token Generated',201);
 
         } else {
 
@@ -95,11 +95,11 @@ class Fhir
                     'last_used_at' => Carbon::now()->addSeconds(3500)->format('Y-m-d H:i:s')
                 ]);
 
-                return ExceptionHandler::response201('Success Refresh Token');
+                return ExceptionHandler::response('Success Refresh Token',201);
 
             } else {
 
-                return ExceptionHandler::response201('Success');
+                return ExceptionHandler::response('Success',201);
 
             }
         }
@@ -137,7 +137,7 @@ class Fhir
         $response = json_decode($response, true);
 
         if ($response === null) {
-            return ExceptionHandler::response401('Error - Failed to create token, please check your client_id and client_secret');
+            return ExceptionHandler::response('Error - Failed to create token, please check your client_id and client_secret',401);
         }
 
         // Check structure of response

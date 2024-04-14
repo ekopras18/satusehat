@@ -2,13 +2,28 @@
 
 namespace Ekopras18\Satusehat\Config;
 
+/**
+ * Class Environment
+ *
+ * This class provides static methods to retrieve various configuration values.
+ */
 class Environment
 {
+    /**
+     * Get the environment configuration value.
+     *
+     * @return string The environment configuration value.
+     */
     public static function env()
     {
         return config('satusehat.environment');
     }
 
+    /**
+     * Get the URL configuration values based on the environment.
+     *
+     * @return array The URL configuration values.
+     */
     public static function url()
     {
         $env = config('satusehat.environment');
@@ -34,6 +49,11 @@ class Environment
         }
     }
 
+    /**
+     * Get the auth configuration values.
+     *
+     * @return array The auth configuration values.
+     */
     public static function auth()
     {
         return [
