@@ -17,7 +17,7 @@ class ExceptionHandler
      * @param mixed $data The data to send to the client.
      * @return \Illuminate\Http\JsonResponse The response to send to the client.
      */
-    public static function response($message, $code, $data = null)
+    public static function response(string $message, int $code, $data = null)
     {
         $response = [
             'status' => $code >= 200 && $code < 300,
