@@ -1,8 +1,21 @@
 <?php
 
 namespace Ekopras18\Satusehat\Exception;
+
+/**
+ * Class ExceptionHandler
+ *
+ * This class provides static methods to handle different types of HTTP responses.
+ */
 class ExceptionHandler
 {
+    /**
+     * Generate a 200 OK response.
+     *
+     * @param string $message The response message.
+     * @param mixed $data The data to be included in the response.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public static function response200($message, $data)
     {
         return response()->json([
@@ -13,6 +26,12 @@ class ExceptionHandler
         ], 200);
     }
 
+    /**
+     * Generate a 201 Created response.
+     *
+     * @param string $message The response message.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public static function response201($message)
     {
         return response()->json([
@@ -22,6 +41,12 @@ class ExceptionHandler
         ], 201);
     }
 
+    /**
+     * Generate a 401 Unauthorized response.
+     *
+     * @param string $message The response message.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public static function response401($message)
     {
         return response()->json([
@@ -31,6 +56,12 @@ class ExceptionHandler
         ], 401);
     }
 
+    /**
+     * Generate a 404 Not Found response.
+     *
+     * @param string $message The response message.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public static function response404($message)
     {
         return response()->json([
@@ -40,7 +71,13 @@ class ExceptionHandler
         ], 404);
     }
 
-    public static function OperationOutcome($response)
+    /**
+     * Generate a 401 Unauthorized response with detailed error information.
+     *
+     * @param array $response The response data containing error details.
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function operationOutcome($response)
     {
         $issue = $response['issue'][0];
         $severity = $issue['severity'];

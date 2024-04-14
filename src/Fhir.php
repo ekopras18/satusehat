@@ -7,8 +7,22 @@ use Ekopras18\Satusehat\Models\Token;
 use Ekopras18\Satusehat\Config\Environment;
 use Carbon\Carbon;
 
+/**
+ * Class Fhir
+ *
+ * This class provides methods to handle FHIR related operations.
+ */
 class Fhir
 {
+    /**
+     * Sends a FHIR request.
+     *
+     * @param string $url The URL to send the request to.
+     * @param string $method The HTTP method to use for the request.
+     * @param mixed $body The body of the request.
+     * @param string $contentType The content type of the request.
+     * @return mixed The response from the server.
+     */
     public function fhir($url, $method, $body, $contentType)
     {
         // check token
@@ -44,18 +58,23 @@ class Fhir
 
         // Check error response
         if (isset($response['resourceType']) && $response['resourceType'] === 'OperationOutcome') {
-            return ExceptionHandler::OperationOutcome($response);
+            return ExceptionHandler::operationOutcome($response);
         } else {
             return ExceptionHandler::response200('Success',$response);
         }
     }
 
+    /**
+     * Checks and refreshes the token if necessary.
+     *
+     * @return mixed The response from the server.
+     */
     public function token()
     {
         $getToken = Token::where('env', Environment::env())->first();
 
         if ($getToken === null) {
-            $generate_token = $this->generate_token();
+            $generate_token = $this->generateToken();
 
             Token::create([
                 'env' => Environment::env(),
@@ -68,7 +87,7 @@ class Fhir
         } else {
 
             if (Carbon::now()->gt($getToken->last_used_at)) {
-                $refresh_token = $this->generate_token();
+                $refresh_token = $this->generateToken();
 
                 Token::where('env', Environment::env())->update([
                     'env' => Environment::env(),
@@ -87,7 +106,12 @@ class Fhir
 
     }
 
-    public function generate_token()
+    /**
+     * Generates a new token.
+     *
+     * @return mixed The response from the server.
+     */
+    public function generateToken()
     {
         $curl = curl_init();
 
@@ -119,7 +143,7 @@ class Fhir
         // Check structure of response
         if (isset($response['resourceType']) && $response['resourceType'] === 'OperationOutcome') {
 
-            return ExceptionHandler::OperationOutcome($response);
+            return ExceptionHandler::operationOutcome($response);
 
         } else {
 

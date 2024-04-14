@@ -4,12 +4,12 @@ namespace Ekopras18\Satusehat\Config;
 
 class Environment
 {
-    public static function Env()
+    public static function env()
     {
         return config('satusehat.environment');
     }
 
-    public static function Url()
+    public static function url()
     {
         $env = config('satusehat.environment');
 
@@ -34,7 +34,7 @@ class Environment
         }
     }
 
-    public static function Auth()
+    public static function auth()
     {
         return [
             'clientId' => config('satusehat.auth.client_id'),

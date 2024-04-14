@@ -13,7 +13,7 @@ class Organization extends Fhir
         $this->baseUrl = Environment::url()['baseUrl'];
         $this->path = 'Organization';
         $this->organitation_id = Environment::auth()['organizationId'];
-        $this->organitation_name = Environment::Auth()['organizationName'];
+        $this->organitation_name = Environment::auth()['organizationName'];
     }
 
     public function GetById($uuid)
