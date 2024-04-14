@@ -1,6 +1,6 @@
 <?php
 
-namespace Ekopras18\Satusehat\Config;
+namespace Ekopras18\Satusehat;
 
 /**
  * Class Environment
