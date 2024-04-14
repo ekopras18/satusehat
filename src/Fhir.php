@@ -4,7 +4,7 @@ namespace Ekopras18\Satusehat;
 
 use Ekopras18\Satusehat\Exception\ExceptionHandler;
 use Ekopras18\Satusehat\Models\Token;
-use Ekopras18\Satusehat\Config\Environment;
+use Ekopras18\Satusehat\Environment;
 use Carbon\Carbon;
 
 /**

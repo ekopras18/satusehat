@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Namespace Satusehat\Integration\Tests
- */
 namespace Satusehat\Integration\Tests;
 
 use PHPUnit\Framework\TestCase;

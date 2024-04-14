@@ -3,7 +3,7 @@
 namespace Ekopras18\Satusehat\Fhir\Onboarding;
 
 use Ekopras18\Satusehat\Fhir;
-use Ekopras18\Satusehat\Config\Environment;
+use Ekopras18\Satusehat\Environment;
 
 /**
  * Class Organization
